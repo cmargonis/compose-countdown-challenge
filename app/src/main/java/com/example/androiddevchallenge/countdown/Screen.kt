@@ -15,10 +15,11 @@
  */
 package com.example.androiddevchallenge.countdown
 
-import androidx.compose.material.Text
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import com.example.androiddevchallenge.ui.widget.HourGlass
 
 @Composable
 fun CountdownContent() {
-    Text(text = "Ready... Set... GO!")
+    HourGlass(strokeColor = MaterialTheme.colors.onSurface)
 }
