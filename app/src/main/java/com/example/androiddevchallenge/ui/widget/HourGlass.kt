@@ -24,7 +24,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.PathFillType
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,6 +44,7 @@ fun HourGlass(strokeColor: Color = Color.Black) {
             .padding(16.dp),
     ) {
         drawFrame(strokeColor = color)
+        drawTopSand()
     }
 }
 
@@ -92,6 +96,21 @@ private fun DrawScope.drawFrame(strokeColor: Color) {
         cap = StrokeCap.Round,
         end = Offset(size.width, size.height),
         strokeWidth = 12f
+    )
+}
+
+private fun DrawScope.drawTopSand() {
+    val path = Path()
+    with(path) {
+        fillType = PathFillType.EvenOdd
+        moveTo(0f, 0f)
+        lineTo(size.width, 0f)
+        lineTo(size.width / 2, size.height / 2)
+        close()
+    }
+    drawPath(
+        path = path,
+        brush = SolidColor(value = Color.Blue)
     )
 }
 
