@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
@@ -35,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.example.androiddevchallenge.ui.theme.MyTheme
 
 @Composable
-fun HourGlass(strokeColor: Color = Color.Black) {
+fun HourGlass(strokeColor: Color = Color.Black, completionPercentage: Float = 0.5f) {
     val color = remember { strokeColor }
     Canvas(
         modifier = Modifier
@@ -44,8 +45,11 @@ fun HourGlass(strokeColor: Color = Color.Black) {
             .padding(16.dp),
     ) {
         drawFrame(strokeColor = color)
-//        drawTopSand()
-        drawBottomSand()
+
+        val topComplete = (size.height / 2f) * completionPercentage
+        val bottomComplete = (size.height - topComplete)
+        drawTopSand(topEdge = topComplete, brush = SolidColor(value = Color.Blue))
+        drawBottomSand(topEdge = bottomComplete, brush = SolidColor(value = Color.Blue))
     }
 }
 
@@ -100,7 +104,7 @@ private fun DrawScope.drawFrame(strokeColor: Color) {
     )
 }
 
-private fun DrawScope.drawTopSand(topEdge: Float = 600f) {
+private fun DrawScope.drawTopSand(topEdge: Float, brush: Brush) {
     val topStart = Point((size.width / size.height) * topEdge, topEdge)
     val topEnd = Point((-(size.width * topEdge) / size.height + size.width), topEdge)
 
@@ -114,25 +118,26 @@ private fun DrawScope.drawTopSand(topEdge: Float = 600f) {
     }
     drawPath(
         path = path,
-        brush = SolidColor(value = Color.Blue)
+        brush = brush
     )
 }
 
-private fun DrawScope.drawBottomSand(topEdge: Float = 600f) {
-    val topStart = Point((size.width / size.height) * topEdge, topEdge)
-    val topEnd = Point((-(size.width * topEdge) / size.height + size.width), topEdge)
+private fun DrawScope.drawBottomSand(topEdge: Float, brush: Brush) {
+    val topStart = Point((-(size.width * topEdge) / size.height + size.width), topEdge)
+    val topEnd = Point((size.width / size.height) * (topEdge), topEdge)
 
     val path = Path()
     with(path) {
         fillType = PathFillType.EvenOdd
         moveTo(topStart.x, topStart.y)
         lineTo(topEnd.x, topEnd.y)
-        lineTo(size.width / 2, size.height / 2)
+        lineTo(size.width, size.height)
+        lineTo(0f, size.height)
         close()
     }
     drawPath(
         path = path,
-        brush = SolidColor(value = Color.Blue)
+        brush = brush
     )
 }
 
