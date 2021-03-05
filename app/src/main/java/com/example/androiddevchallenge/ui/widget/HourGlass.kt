@@ -44,7 +44,8 @@ fun HourGlass(strokeColor: Color = Color.Black) {
             .padding(16.dp),
     ) {
         drawFrame(strokeColor = color)
-        drawTopSand()
+//        drawTopSand()
+        drawBottomSand()
     }
 }
 
@@ -99,12 +100,15 @@ private fun DrawScope.drawFrame(strokeColor: Color) {
     )
 }
 
-private fun DrawScope.drawTopSand() {
+private fun DrawScope.drawTopSand(topEdge: Float = 600f) {
+    val topStart = Point((size.width / size.height) * topEdge, topEdge)
+    val topEnd = Point((-(size.width * topEdge) / size.height + size.width), topEdge)
+
     val path = Path()
     with(path) {
         fillType = PathFillType.EvenOdd
-        moveTo(0f, 0f)
-        lineTo(size.width, 0f)
+        moveTo(topStart.x, topStart.y)
+        lineTo(topEnd.x, topEnd.y)
         lineTo(size.width / 2, size.height / 2)
         close()
     }
@@ -113,6 +117,26 @@ private fun DrawScope.drawTopSand() {
         brush = SolidColor(value = Color.Blue)
     )
 }
+
+private fun DrawScope.drawBottomSand(topEdge: Float = 600f) {
+    val topStart = Point((size.width / size.height) * topEdge, topEdge)
+    val topEnd = Point((-(size.width * topEdge) / size.height + size.width), topEdge)
+
+    val path = Path()
+    with(path) {
+        fillType = PathFillType.EvenOdd
+        moveTo(topStart.x, topStart.y)
+        lineTo(topEnd.x, topEnd.y)
+        lineTo(size.width / 2, size.height / 2)
+        close()
+    }
+    drawPath(
+        path = path,
+        brush = SolidColor(value = Color.Blue)
+    )
+}
+
+data class Point(val x: Float, val y: Float)
 
 @Preview(
     name = "Light Theme",
