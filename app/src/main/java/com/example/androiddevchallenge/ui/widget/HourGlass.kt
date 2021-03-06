@@ -16,8 +16,6 @@
 package com.example.androiddevchallenge.ui.widget
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -36,13 +34,14 @@ import androidx.compose.ui.unit.dp
 import com.example.androiddevchallenge.ui.theme.MyTheme
 
 @Composable
-fun HourGlass(strokeColor: Color = Color.Black, completionPercentage: Float = 0.5f) {
+fun HourGlass(
+    modifier: Modifier = Modifier,
+    strokeColor: Color = Color.Black,
+    completionPercentage: Float = 0.5f
+) {
     val color = remember { strokeColor }
     Canvas(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .padding(16.dp),
+        modifier = modifier.padding(16.dp),
     ) {
         drawFrame(strokeColor = color)
 
