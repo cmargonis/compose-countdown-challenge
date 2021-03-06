@@ -16,6 +16,7 @@
 package com.example.androiddevchallenge
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
@@ -34,6 +35,9 @@ import androidx.compose.ui.unit.dp
 import com.example.androiddevchallenge.countdown.CountdownContent
 import com.example.androiddevchallenge.countdown.PlayState
 import com.example.androiddevchallenge.ui.theme.MyTheme
+import java.util.concurrent.TimeUnit
+
+private const val TWENTY_SECONDS = 20000L
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,10 +53,23 @@ class MainActivity : AppCompatActivity() {
 // Start building your app here!
 @Composable
 fun MyApp() {
+
     Surface(color = MaterialTheme.colors.background) {
         var playState by remember { mutableStateOf(PlayState.CAN_PLAY) }
-        var timerText by remember { mutableStateOf("05:00") }
+        var timerText by remember { mutableStateOf("20:00") }
         var completedPercent by remember { mutableStateOf(0f) }
+        val timer = object : CountDownTimer(TWENTY_SECONDS, 100) {
+            override fun onTick(millisUntilFinished: Long) {
+                timerText = formatMillisToSeconds(millisUntilFinished)
+                val elapsedTime = TWENTY_SECONDS - millisUntilFinished
+                completedPercent = (elapsedTime.toDouble() / TWENTY_SECONDS).toFloat()
+            }
+
+            override fun onFinish() {
+                playState = PlayState.CAN_RESET
+                timerText = "00:00"
+            }
+        }
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -67,15 +84,38 @@ fun MyApp() {
                 completionPercent = completedPercent,
                 playState = playState
             ) {
-                playState = when (playState) {
-                    PlayState.CAN_PLAY -> PlayState.CAN_PAUSE
-                    PlayState.CAN_PAUSE -> PlayState.CAN_RESET
-                    PlayState.CAN_RESET -> PlayState.CAN_PLAY
+                playState = setPlayState(playState)
+                when (playState) {
+                    PlayState.CAN_PLAY -> {
+                        timer.cancel()
+                        completedPercent = 0f
+                        timerText = "20:00"
+                    }
+                    PlayState.CAN_PAUSE -> timer.start()
+                    PlayState.CAN_RESET -> timer.cancel()
                 }
             }
         }
     }
+
 }
+
+private fun formatMillisToSeconds(timeMs: Long): String {
+    return String.format(
+        "%02d:%02d",
+        TimeUnit.MILLISECONDS.toSeconds(timeMs),
+        (timeMs - TimeUnit.SECONDS.toMillis(TimeUnit.MILLISECONDS.toSeconds(timeMs))).toString()
+            .take(2)
+            .toInt()
+    )
+}
+
+private fun setPlayState(playState: PlayState) =
+    when (playState) {
+        PlayState.CAN_PLAY -> PlayState.CAN_PAUSE
+        PlayState.CAN_PAUSE -> PlayState.CAN_RESET
+        PlayState.CAN_RESET -> PlayState.CAN_PLAY
+    }
 
 @Preview("Light Theme", widthDp = 360, heightDp = 640)
 @Composable
