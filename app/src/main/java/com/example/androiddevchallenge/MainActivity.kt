@@ -52,6 +52,7 @@ fun MyApp() {
     Surface(color = MaterialTheme.colors.background) {
         var playState by remember { mutableStateOf(PlayState.CAN_PLAY) }
         var timerText by remember { mutableStateOf("05:00") }
+        var completedPercent by remember { mutableStateOf(0f) }
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -61,7 +62,11 @@ fun MyApp() {
                 )
             }
         ) {
-            CountdownContent(timerText = timerText, playState = playState) {
+            CountdownContent(
+                timerText = timerText,
+                completionPercent = completedPercent,
+                playState = playState
+            ) {
                 playState = when (playState) {
                     PlayState.CAN_PLAY -> PlayState.CAN_PAUSE
                     PlayState.CAN_PAUSE -> PlayState.CAN_RESET

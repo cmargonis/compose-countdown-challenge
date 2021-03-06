@@ -39,7 +39,7 @@ import com.example.androiddevchallenge.R
 import com.example.androiddevchallenge.ui.widget.HourGlass
 
 @Composable
-fun CountdownContent(timerText: String, playState: PlayState, onPlayClick: () -> Unit) {
+fun CountdownContent(timerText: String, completionPercent: Float, playState: PlayState, onPlayClick: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Surface(
             shape = MaterialTheme.shapes.medium.copy(all = CornerSize(percent = 50)),
@@ -61,7 +61,7 @@ fun CountdownContent(timerText: String, playState: PlayState, onPlayClick: () ->
                         .width(140.dp)
                         .height(200.dp),
                     strokeColor = MaterialTheme.colors.onSurface,
-                    completionPercentage = 0f
+                    completionPercentage = completionPercent
                 )
             }
         }
