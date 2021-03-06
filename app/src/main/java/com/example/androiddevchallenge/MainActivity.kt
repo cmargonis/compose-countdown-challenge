@@ -24,10 +24,15 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.androiddevchallenge.countdown.CountdownContent
+import com.example.androiddevchallenge.countdown.PlayState
 import com.example.androiddevchallenge.ui.theme.MyTheme
 
 class MainActivity : AppCompatActivity() {
@@ -45,6 +50,8 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MyApp() {
     Surface(color = MaterialTheme.colors.background) {
+        var playState by remember { mutableStateOf(PlayState.CAN_PLAY) }
+        var timerText by remember { mutableStateOf("05:00") }
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -54,7 +61,13 @@ fun MyApp() {
                 )
             }
         ) {
-            CountdownContent()
+            CountdownContent(timerText = timerText, playState = playState) {
+                playState = when (playState) {
+                    PlayState.CAN_PLAY -> PlayState.CAN_PAUSE
+                    PlayState.CAN_PAUSE -> PlayState.CAN_RESET
+                    PlayState.CAN_RESET -> PlayState.CAN_PLAY
+                }
+            }
         }
     }
 }

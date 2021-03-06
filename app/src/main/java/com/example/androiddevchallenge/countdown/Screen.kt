@@ -39,7 +39,7 @@ import com.example.androiddevchallenge.R
 import com.example.androiddevchallenge.ui.widget.HourGlass
 
 @Composable
-fun CountdownContent() {
+fun CountdownContent(timerText: String, playState: PlayState, onPlayClick: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Surface(
             shape = MaterialTheme.shapes.medium.copy(all = CornerSize(percent = 50)),
@@ -67,19 +67,35 @@ fun CountdownContent() {
         }
 
         Text(
-            text = "05:00",
+            text = timerText,
             style = MaterialTheme.typography.h3,
             modifier = Modifier.padding(top = 16.dp)
         )
 
         FloatingActionButton(
             modifier = Modifier.padding(16.dp),
-            onClick = { /*TODO*/ }
+            onClick = { onPlayClick() }
         ) {
             Image(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_play_arrow),
+                imageVector = getIcon(playState),
                 contentDescription = "Play"
             )
         }
     }
+}
+
+@Composable
+private fun getIcon(playState: PlayState): ImageVector {
+    val icon = when (playState) {
+        PlayState.CAN_PLAY -> R.drawable.ic_play_arrow
+        PlayState.CAN_PAUSE -> R.drawable.ic_pause
+        PlayState.CAN_RESET -> R.drawable.ic_replay
+    }
+    return ImageVector.vectorResource(id = icon)
+}
+
+enum class PlayState {
+    CAN_PLAY,
+    CAN_PAUSE,
+    CAN_RESET
 }
