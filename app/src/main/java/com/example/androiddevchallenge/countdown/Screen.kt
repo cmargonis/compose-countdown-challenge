@@ -15,6 +15,7 @@
  */
 package com.example.androiddevchallenge.countdown
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,12 +25,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.example.androiddevchallenge.R
 import com.example.androiddevchallenge.ui.widget.HourGlass
 
 @Composable
@@ -58,6 +64,22 @@ fun CountdownContent() {
                     completionPercentage = 0f
                 )
             }
+        }
+
+        Text(
+            text = "05:00",
+            style = MaterialTheme.typography.h3,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+
+        FloatingActionButton(
+            modifier = Modifier.padding(16.dp),
+            onClick = { /*TODO*/ }
+        ) {
+            Image(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_play_arrow),
+                contentDescription = "Play"
+            )
         }
     }
 }
