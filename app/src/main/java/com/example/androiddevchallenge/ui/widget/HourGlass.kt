@@ -18,9 +18,9 @@ package com.example.androiddevchallenge.ui.widget
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -38,37 +38,38 @@ import com.example.androiddevchallenge.ui.theme.MyTheme
 @Composable
 fun HourGlass(
     modifier: Modifier = Modifier,
-    strokeColor: Color = Color.Black,
+    strokeColor: Color = MaterialTheme.colors.primaryVariant,
+    fillColor: Color = MaterialTheme.colors.primary,
     completionPercentage: Float = 0.5f
 ) {
     val percent: Float by animateFloatAsState(completionPercentage)
-    val color = remember { strokeColor }
+
     Canvas(
         modifier = modifier.padding(16.dp),
     ) {
-        drawFrame(strokeColor = color)
+        drawFrame(strokeColor = strokeColor, strokeWidth = 8f)
 
         val topComplete = (size.height / 2f) * percent
         val bottomComplete = (size.height - topComplete)
-        drawTopSand(topEdge = topComplete, brush = SolidColor(value = Color.Blue))
-        drawBottomSand(topEdge = bottomComplete, brush = SolidColor(value = Color.Blue))
+        drawTopSand(topEdge = topComplete, brush = SolidColor(value = fillColor))
+        drawBottomSand(topEdge = bottomComplete, brush = SolidColor(value = fillColor))
     }
 }
 
-private fun DrawScope.drawFrame(strokeColor: Color) {
+private fun DrawScope.drawFrame(strokeColor: Color, strokeWidth: Float) {
     drawLine(
         color = strokeColor,
         start = Offset.Zero,
         cap = StrokeCap.Round,
         end = Offset(size.width, 0f),
-        strokeWidth = 12f
+        strokeWidth = strokeWidth
     )
 
     drawLine(
         color = strokeColor,
         start = Offset.Zero,
         end = Offset(size.width / 2, size.height / 2),
-        strokeWidth = 12f,
+        strokeWidth = strokeWidth,
         cap = StrokeCap.Round,
         pathEffect = PathEffect.cornerPathEffect(12f)
     )
@@ -78,7 +79,7 @@ private fun DrawScope.drawFrame(strokeColor: Color) {
         start = Offset(size.width, 0f),
         cap = StrokeCap.Round,
         end = Offset(size.width / 2, size.height / 2),
-        strokeWidth = 12f
+        strokeWidth = strokeWidth
     )
 
     drawLine(
@@ -86,7 +87,7 @@ private fun DrawScope.drawFrame(strokeColor: Color) {
         start = Offset(size.width, size.height),
         cap = StrokeCap.Round,
         end = Offset(size.width / 2, size.height / 2),
-        strokeWidth = 12f
+        strokeWidth = strokeWidth
     )
 
     drawLine(
@@ -94,7 +95,7 @@ private fun DrawScope.drawFrame(strokeColor: Color) {
         start = Offset(0f, size.height),
         cap = StrokeCap.Round,
         end = Offset(size.width / 2, size.height / 2),
-        strokeWidth = 12f
+        strokeWidth = strokeWidth
     )
 
     drawLine(
@@ -102,7 +103,7 @@ private fun DrawScope.drawFrame(strokeColor: Color) {
         start = Offset(0f, size.height),
         cap = StrokeCap.Round,
         end = Offset(size.width, size.height),
-        strokeWidth = 12f
+        strokeWidth = strokeWidth
     )
 }
 
@@ -155,6 +156,6 @@ data class Point(val x: Float, val y: Float)
 @Composable
 fun HourglassPreview() {
     MyTheme(darkTheme = false) {
-        HourGlass(strokeColor = Color.Black)
+        HourGlass(strokeColor = MaterialTheme.colors.primaryVariant)
     }
 }
