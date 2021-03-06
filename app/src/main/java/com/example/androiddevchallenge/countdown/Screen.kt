@@ -15,6 +15,13 @@
  */
 package com.example.androiddevchallenge.countdown
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +37,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -39,7 +49,12 @@ import com.example.androiddevchallenge.R
 import com.example.androiddevchallenge.ui.widget.HourGlass
 
 @Composable
-fun CountdownContent(timerText: String, completionPercent: Float, playState: PlayState, onPlayClick: () -> Unit) {
+fun CountdownContent(
+    timerText: String,
+    completionPercent: Float,
+    playState: PlayState,
+    onPlayClick: () -> Unit
+) {
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Surface(
             shape = MaterialTheme.shapes.medium.copy(all = CornerSize(percent = 50)),
@@ -49,9 +64,23 @@ fun CountdownContent(timerText: String, completionPercent: Float, playState: Pla
                 .padding(top = 24.dp, start = 16.dp, end = 16.dp),
             elevation = 16.dp
         ) {
+            val size = remember { Animatable(200f) }
+
+            LaunchedEffect(playState) {
+                when (playState) {
+                    PlayState.CAN_PLAY -> size.animateTo(200f)
+                    PlayState.CAN_PAUSE -> size.animateTo(300f)
+                    PlayState.CAN_RESET -> size.animateTo(250f)
+                }
+            }
+            val value by animateFloatAsState(
+                targetValue = size.value,
+                animationSpec = getAnimatorSpec(playState)
+            )
+
             Box(
                 modifier = Modifier
-                    .size(200.dp)
+                    .size(value.dp)
                     .padding(24.dp),
                 contentAlignment = Alignment.Center
             ) {
@@ -82,6 +111,24 @@ fun CountdownContent(timerText: String, completionPercent: Float, playState: Pla
             )
         }
     }
+}
+
+private fun getAnimatorSpec(playState: PlayState): AnimationSpec<Float> = when (playState) {
+    PlayState.CAN_PLAY -> tween(
+        durationMillis = 500,
+        easing = LinearOutSlowInEasing
+    )
+    PlayState.CAN_PAUSE -> infiniteRepeatable(
+        animation = tween(
+            durationMillis = 500,
+            easing = LinearOutSlowInEasing
+        ),
+        repeatMode = RepeatMode.Reverse
+    )
+    PlayState.CAN_RESET -> tween(
+        durationMillis = 500,
+        easing = LinearOutSlowInEasing
+    )
 }
 
 @Composable
