@@ -97,7 +97,6 @@ fun MyApp() {
             }
         }
     }
-
 }
 
 private fun formatMillisToSeconds(timeMs: Long): String {

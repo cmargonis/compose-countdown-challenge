@@ -15,9 +15,11 @@
  */
 package com.example.androiddevchallenge.ui.widget
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -39,13 +41,14 @@ fun HourGlass(
     strokeColor: Color = Color.Black,
     completionPercentage: Float = 0.5f
 ) {
+    val percent: Float by animateFloatAsState(completionPercentage)
     val color = remember { strokeColor }
     Canvas(
         modifier = modifier.padding(16.dp),
     ) {
         drawFrame(strokeColor = color)
 
-        val topComplete = (size.height / 2f) * completionPercentage
+        val topComplete = (size.height / 2f) * percent
         val bottomComplete = (size.height - topComplete)
         drawTopSand(topEdge = topComplete, brush = SolidColor(value = Color.Blue))
         drawBottomSand(topEdge = bottomComplete, brush = SolidColor(value = Color.Blue))
