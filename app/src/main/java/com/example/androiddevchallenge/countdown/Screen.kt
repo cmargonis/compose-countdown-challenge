@@ -15,11 +15,49 @@
  */
 package com.example.androiddevchallenge.countdown
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.androiddevchallenge.ui.widget.HourGlass
 
 @Composable
 fun CountdownContent() {
-    HourGlass(strokeColor = MaterialTheme.colors.onSurface)
+    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Surface(
+            shape = MaterialTheme.shapes.medium.copy(all = CornerSize(percent = 50)),
+            color = MaterialTheme.colors.secondary,
+            modifier = Modifier
+                .wrapContentSize()
+                .padding(top = 24.dp, start = 16.dp, end = 16.dp),
+            elevation = 16.dp
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(200.dp)
+                    .padding(24.dp),
+                contentAlignment = Alignment.Center
+            ) {
+
+                HourGlass(
+                    modifier = Modifier
+                        .width(140.dp)
+                        .height(200.dp),
+                    strokeColor = MaterialTheme.colors.onSurface,
+                    completionPercentage = 0f
+                )
+            }
+        }
+    }
 }
