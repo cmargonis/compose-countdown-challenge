@@ -1,4 +1,4 @@
-# Put title of your app here
+# Deadline
 
 ![Workflow result](https://github.com/cmargonis/compose-countdown-challenge/workflows/Check/badge.svg)
 
